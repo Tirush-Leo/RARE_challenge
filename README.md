@@ -57,14 +57,18 @@ access the data.
 
 ---
 
-## 🏗️ Model Architecture  
-The model was designed to balance **sensitivity** (catching rare cases) and **specificity** (avoiding false alarms). Key components include:  
+## 🏗️ Model Architecture – Vision Transformer (ViT)  
+The backbone of this project is a **Vision Transformer (ViT)**, implemented using the **timm** library:  
 
-- **Backbone:** Deep convolutional neural network (CNN) with transfer learning from an ImageNet-pretrained model.  
-- **Feature Extractor:** Multi-scale feature maps to capture both subtle local anomalies and global patterns.  
-- **Classifier Head:** Fully connected layers with dropout for regularization.  
-- **Loss Function:** Weighted cross-entropy / focal loss to address extreme class imbalance.  
-- **Optimization:** Adam optimizer with cyclical learning rate scheduling.  
+- **Model Variant:** `vit_base_patch16_224`, pretrained on ImageNet.  
+- **Architecture:** Patch-based image embedding (16×16 patches) with multi-head self-attention layers, feed-forward networks, and layer normalization.  
+- **Representation:** The `[CLS]` token output from the transformer encoder is used as the global image representation.  
+- **Classification Head:** A lightweight projection layer maps the transformer output to binary classes (neoplasia vs. non-neoplasia).  
+- **Loss Function:** Weighted cross-entropy to address extreme class imbalance.  
+- **Optimization:** Adam with learning rate scheduling for stable convergence.  
+
+This architecture leverages the **global context modeling capability of ViTs**, which is especially important for detecting subtle anomalies in highly imbalanced endoscopic data.  
+
 
 ---
 
