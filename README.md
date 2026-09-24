@@ -19,6 +19,14 @@
 
 The Open Development result is used as the primary challenge outcome for this project.
 
+<p align="center">
+  <img src="./images/open_development.png" width="85%" alt="RARE25 Open Development leaderboard">
+</p>
+
+<p align="center">
+  <img src="./images/sanity_check.png" width="85%" alt="RARE25 Sanity Check leaderboard">
+</p>
+
 [Open Development Leaderboard](https://rare25.grand-challenge.org/evaluation/open-development-phase/leaderboard/) •
 [Sanity Check Leaderboard](https://rare25.grand-challenge.org/evaluation/test-submission-debug/leaderboard/)
 
