@@ -1,28 +1,23 @@
-# 🔬 Barrett’s Esophagus Early Cancer Detection — MICCAI RARE25 Challenge
+# 🔬 Barrett’s Esophagus Early Cancer Detection — MICCAI RARE25
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![timm](https://img.shields.io/badge/timm-Vision%20Transformer-6f42c1)](https://github.com/huggingface/pytorch-image-models)
-[![Docker](https://img.shields.io/badge/Docker-Containerized%20Inference-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![Medical Imaging](https://img.shields.io/badge/Domain-Medical%20Imaging-0A8F5A)](#-project-overview)
-[![Challenge](https://img.shields.io/badge/MICCAI-RARE25-orange)](#-challenge-results)
+[![Vision Transformer](https://img.shields.io/badge/Model-Vision%20Transformer-6f42c1)](https://github.com/huggingface/pytorch-image-models)
+[![Docker](https://img.shields.io/badge/Docker-Challenge%20Submission-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Challenge](https://img.shields.io/badge/MICCAI-RARE25-orange)](https://rare25.grand-challenge.org/)
 
-> **Vision Transformer-based classification pipeline for early-stage Barrett’s esophagus cancer detection from endoscopic images.**
+> **Vision Transformer-based classification pipeline for detecting early neoplasia in Barrett’s Esophagus from endoscopic images.**
 >
-> Developed for the **MICCAI RARE25 Challenge**, this project focuses on robust endoscopic image classification under extreme class imbalance, with emphasis on preprocessing, augmentation, imbalance-aware training, and Dockerized challenge submission.
+> Developed for the **MICCAI RARE25 Challenge**, with emphasis on class-imbalance handling, transfer learning, and reproducible challenge evaluation.
 
 ---
 
 ## 🏆 Challenge Results
 
-This project was developed and submitted as part of the **MICCAI RARE25 Challenge**.
+- **36th globally** — Open Development Phase
+- **1st place** — Sanity Check Phase
 
-### Reported Outcomes
-
-- **36th globally** in the **Open Development Phase**
-- **1st place** in the **Sanity Check Phase**
-
-The portfolio emphasis is placed on the **Open Development Phase ranking**, while the Sanity Check result is included as an early development milestone.
+The Open Development result is used as the primary challenge outcome for this project.
 
 <p align="center">
   <img src="./images/open_development.png" width="85%" alt="RARE25 Open Development leaderboard">
@@ -32,260 +27,308 @@ The portfolio emphasis is placed on the **Open Development Phase ranking**, whil
   <img src="./images/sanity_check.png" width="85%" alt="RARE25 Sanity Check leaderboard">
 </p>
 
-- [Open Development Phase Leaderboard](https://rare25.grand-challenge.org/evaluation/open-development-phase/leaderboard/)
-- [Sanity Check Leaderboard](https://rare25.grand-challenge.org/evaluation/test-submission-debug/leaderboard/)
+[Open Development Leaderboard](https://rare25.grand-challenge.org/evaluation/open-development-phase/leaderboard/) •
+[Sanity Check Leaderboard](https://rare25.grand-challenge.org/evaluation/test-submission-debug/leaderboard/)
 
 ---
 
 ## 📖 Project Overview
 
-Barrett’s Esophagus (BE) is a premalignant condition that can progress to esophageal adenocarcinoma. Detecting **early neoplasia** during routine endoscopy is clinically important, but also highly challenging because suspicious cases are:
+The RARE25 Challenge focuses on detecting **early neoplasia in Barrett’s Esophagus (BE)** from endoscopic images.
 
-- **rare**
-- **subtle**
-- visually variable
-- easily confused with non-neoplastic tissue
+This is a difficult classification problem because positive cases are rare and visual abnormalities can be subtle.
 
-This project develops an image-classification pipeline for **early cancer detection in Barrett’s Esophagus** using endoscopic images.
+The project develops a binary classification pipeline using a pretrained **Vision Transformer (ViT)** together with:
 
-The system was designed to address three major challenges:
+- endoscopic image preprocessing
+- imbalance-aware training
+- transfer learning
+- progressive fine-tuning
+- challenge-oriented evaluation
 
-1. **Low prevalence of positive cases**
-2. **Subtle visual abnormalities**
-3. **The need for a practical and reproducible challenge-submission workflow**
-
-The final solution uses a **Vision Transformer (ViT)** backbone together with preprocessing, augmentation, and imbalance-aware training strategies.
-
----
-
-## 🧑‍⚕️ Clinical Context
-
-Early Barrett’s-associated neoplasia is difficult to detect in real-world endoscopy because relevant visual cues can be small and subtle.
-
-From a clinical perspective:
-
-- missed early lesions may delay treatment
-- early detection can enable endoscopic intervention
-- highly imbalanced prevalence makes model development difficult
-- a useful model must balance **sensitivity** and **specificity**
-
-This challenge setting therefore requires models that are not only accurate, but also robust under severe class imbalance.
-
----
-
-## 📊 Dataset & Challenge Context
-
-This work is based on the **RARE25 Challenge dataset**, provided through the official challenge platform.
-
-### Dataset Characteristics
-
-- Endoscopic images for Barrett’s Esophagus analysis
-- Binary classification setting:
-  - **Neoplasia**
-  - **Non-neoplasia**
-- Strong class imbalance
-- Small proportion of positive / early-cancer examples
-
-### Access Note
-
-The challenge data is not redistributed through this repository.
-
-To access the dataset, please use the official source and accept the required access conditions:
-
-🔗 [RARE25-train on Hugging Face](https://huggingface.co/datasets/TimJaspersTue/RARE25-train)
-
----
-
-## 🏗️ System Pipeline
-
-The project follows a structured classification workflow:
-
-```mermaid
-graph LR
-    A[Endoscopic Images] --> B[Preprocessing]
-    B --> C[Data Augmentation]
-    C --> D[Class Balancing]
-    D --> E[Vision Transformer]
-    E --> F[Classification Head]
-    F --> G[Probability Output]
-    G --> H[Challenge Submission / Docker Inference]
+```text
+Endoscopic Image
+       ↓
+Preprocessing
+       ↓
+Vision Transformer
+       ↓
+Binary Classification
+       ↓
+Neoplasia Likelihood
 ```
 
 ---
 
-## 🧠 Model Architecture
+## 📊 Dataset
 
-The backbone of the project is a **Vision Transformer (ViT)** implemented using the **timm** library.
+The project uses the official **RARE25 training dataset**.
 
-### Model Configuration
+### Dataset Categories
 
-- **Backbone:** `vit_base_patch16_224`
-- **Pretraining:** ImageNet
-- **Patch Size:** 16 × 16
-- **Global Representation:** `[CLS]` token
-- **Task:** Binary classification
-- **Output Classes:**
-  - Neoplasia
-  - Non-neoplasia
+The source dataset contains two main categories:
 
-### Architecture Summary
+| Category | Description |
+|---|---|
+| **NDBT** | Non-dysplastic Barrett’s tissue / non-neoplastic category |
+| **ACHD** | Neoplastic / early-cancer category used in the dataset |
 
-The model uses:
+The task is treated as a binary classification problem:
 
-- patch-based image embedding
-- transformer encoder layers
-- multi-head self-attention
-- feed-forward layers
-- layer normalization
-- lightweight classification head
+```text
+NDBT → Non-neoplastic
+ACHD → Neoplastic
+```
 
-This architecture was selected for its ability to model **global context**, which is useful for capturing subtle and spatially distributed visual patterns in endoscopic images.
+Because neoplastic examples are much less common, class imbalance is a major challenge during training.
+
+### Example Images
+
+Representative images from both categories can be shown to illustrate the visual difficulty of the task.
+
+#### NDBT
+
+<p align="center">
+  <img src="./images/dataset/ndbt_01.png" width="30%" alt="NDBT example 1">
+  <img src="./images/dataset/ndbt_02.png" width="30%" alt="NDBT example 2">
+  <img src="./images/dataset/ndbt_03.png" width="30%" alt="NDBT example 3">
+</p>
+
+#### ACHD
+
+<p align="center">
+  <img src="./images/dataset/achd_01.png" width="30%" alt="ACHD example 1">
+  <img src="./images/dataset/achd_02.png" width="30%" alt="ACHD example 2">
+  <img src="./images/dataset/achd_03.png" width="30%" alt="ACHD example 3">
+</p>
+
+> Dataset images should only be included when redistribution is permitted by the original dataset access conditions.
+
+**Dataset:**  
+[RARE25 Training Dataset — Hugging Face](https://huggingface.co/datasets/TimJaspersTue/RARE25-train)
 
 ---
 
-## 🧪 Preprocessing & Data Handling
+## 🏗️ Model Pipeline
 
-To improve robustness and support model learning, the training pipeline included several preprocessing and augmentation strategies.
+```mermaid
+graph LR
+    A[Endoscopic Image] --> B[CLAHE]
+    B --> C[Resize + Center Crop]
+    C --> D[ImageNet Normalization]
+    D --> E[Pretrained ViT-B/16]
+    E --> F[512-D Dense Layer]
+    F --> G[128-D Dense Layer]
+    G --> H[Binary Output]
+    H --> I[Neoplasia Probability]
+```
 
-### Preprocessing
+---
 
-- image normalization
-- resizing to a consistent input resolution
-- cropping / framing adjustments where needed
-- preparation of images for ViT-based inference
+## 🧠 Vision Transformer
 
-### Data Augmentation
+The classification model is based on:
 
-To improve generalization under limited positive data, augmentation techniques included:
+```text
+vit_base_patch16_224
+```
 
-- rotation
-- horizontal / vertical flipping
-- brightness variation
-- color jittering
+implemented using the **timm** library and initialized with ImageNet-pretrained weights.
 
-These transformations were intended to improve robustness to lighting, viewpoint, and tissue-appearance variability.
+### Input
+
+```text
+224 × 224 RGB image
+```
+
+### Classification Head
+
+```text
+ViT Feature Representation
+          ↓
+Linear → 512
+          ↓
+ReLU + Dropout
+          ↓
+Linear → 128
+          ↓
+ReLU + Dropout
+          ↓
+Linear → 1
+          ↓
+Sigmoid Probability
+```
+
+The final output represents the estimated likelihood of the positive neoplastic class.
+
+---
+
+## 🧪 Image Preprocessing
+
+The active preprocessing pipeline includes:
+
+1. **CLAHE contrast enhancement**
+2. Resize to the target input resolution
+3. Center crop
+4. Tensor conversion
+5. ImageNet normalization
+
+```text
+RGB Image
+    ↓
+CLAHE
+    ↓
+Resize
+    ↓
+Center Crop
+    ↓
+224 × 224
+    ↓
+ImageNet Normalization
+```
+
+CLAHE is applied to improve local contrast in the endoscopic images before ViT inference.
 
 ---
 
 ## ⚖️ Class-Imbalance Handling
 
-A central challenge of the dataset was the **extreme imbalance** between neoplastic and non-neoplastic cases.
+The dataset contains substantially fewer positive examples than negative examples.
 
-To address this, the training pipeline incorporated:
+Two complementary strategies were used.
 
-- **weighted cross-entropy loss**
-- **weighted sampling**
-- stronger exposure of minority-class examples during training
+### Positive-Class Oversampling
 
-This helped reduce bias toward the majority class and improve the model’s ability to learn from rare positive samples.
+Positive training examples were repeated to increase their representation during optimization.
+
+```text
+Positive Class → 3× Training Representation
+```
+
+### Weighted Loss
+
+Training uses:
+
+```text
+BCEWithLogitsLoss
+```
+
+with a positive-class weight derived from the training class distribution.
+
+```text
+pos_weight = Negative Samples / Positive Samples
+```
+
+This increases the contribution of positive examples to the training loss.
 
 ---
 
 ## 🏋️ Training Strategy
 
-The model development process focused on stable optimization and robust estimation under data scarcity.
+The pretrained transformer is fine-tuned progressively rather than training the complete backbone from the beginning.
 
-### Training Components
+### Progressive Unfreezing
 
-- Vision Transformer backbone
-- weighted cross-entropy loss
-- Adam optimizer
-- learning-rate scheduling
-- augmentation-driven regularization
-- cross-validation during experimentation
+| Stage | Trainable Final ViT Blocks |
+|---|---:|
+| Initial | 1 |
+| Epoch 3 | 2 |
+| Epoch 6 | 4 |
+| Epoch 10 | 6 |
 
-### Development Focus
+### Optimization
 
-The pipeline was designed to improve:
-
-- robustness to rare positive cases
-- sensitivity to subtle visual abnormalities
-- generalization under limited class-positive data
-- reproducibility of inference and challenge submission
-
----
-
-## 📈 Project Outcome
-
-The final project demonstrated that a **Vision Transformer-based classification pipeline**, combined with preprocessing and imbalance-aware training, can provide a practical approach for early Barrett’s esophagus cancer detection in a challenge setting.
-
-### Key Project Strengths
-
-- ViT-based global-context modeling
-- targeted preprocessing and augmentation
-- class-imbalance-aware optimization
-- reproducible Docker submission workflow
-- external benchmark evaluation through the MICCAI RARE25 Challenge
+- **Optimizer:** AdamW
+- **Base learning rate:** `1e-3`
+- **Weight decay:** `0.05`
+- **Layer-wise LR decay:** `0.85`
+- **Scheduler:** Cosine decay
+- **Warm-up:** 5% of training steps
+- **Mixed precision:** Enabled on CUDA
+- **EMA:** Used for more stable model evaluation
 
 ---
 
-## 🐳 Docker Submission Workflow
+## 📊 Open Development Results
 
-The final submission was packaged inside a **Docker container** to ensure consistent inference behavior during challenge evaluation.
+The submitted **Vision Transformer** was evaluated by the RARE25 organizers on the **Open Development test set**.
 
-### Submission Workflow
+| Metric | Score | 95% Confidence Interval |
+|---|---:|---:|
+| **PPV @ 90% Recall** | **0.0115** | 0.0099 – 0.0208 |
+| **AUROC** | **0.7148** | 0.5464 – 0.8622 |
+| **AUPRC** | **0.0851** | 0.0162 – 0.2727 |
 
-1. Load trained model weights
-2. Preprocess challenge input images
-3. Run model inference
-4. Generate prediction probabilities / labels
-5. Format outputs according to challenge requirements
-6. Execute inside Docker for reproducible submission
+<!-- <p align="center">
+  <img src="./images/open_development_metrics.png" width="95%" alt="RARE25 Open Development evaluation results">
+</p> -->
 
-This Dockerized workflow supported portability and consistent challenge evaluation.
+### Primary Metric
+
+The challenge uses **PPV at 90% recall** as a key evaluation measure for rare-case detection.
+
+This evaluates how precise the system remains while operating at a high sensitivity level.
+
+---
+
+## 🐳 Challenge Submission
+
+RARE25 submissions are evaluated using **Docker-based Grand Challenge containers**.
+
+The inference workflow follows:
+
+```text
+Challenge Input
+      ↓
+Image Loading
+      ↓
+Preprocessing
+      ↓
+Model Inference
+      ↓
+Neoplasia Likelihood
+      ↓
+Challenge Output
+```
+
+Docker packaging ensures that inference executes consistently in the challenge evaluation environment.
 
 ---
 
 ## 📦 Reproducibility
 
-This repository contains the main project materials for the **RARE25 challenge workflow**.
+The repository contains the project materials used during model development and challenge participation.
 
-Full reproduction of training results may require:
+Full reproduction requires:
 
-- access to the official challenge dataset
-- acceptance of challenge data conditions
-- the same train/validation split strategy used during development
-- the same training and augmentation configuration used during experimentation
+- access to the official RARE25 dataset
+- corresponding dataset metadata
+- trained model weights
+- compatible PyTorch and `timm` environments
 
-Because challenge datasets are access-controlled, the dataset itself is **not included** in this repository.
+The challenge dataset itself is not redistributed in this repository.
 
----
-
-## ⚠️ Limitations
-
-This work was developed for a **challenge / research setting** and has several limitations:
-
-- strong class imbalance
-- limited number of positive examples
-- possible dataset-specific bias
-- performance may vary under different clinical acquisition conditions
-- challenge performance does not imply direct clinical readiness
-
-This project should therefore be interpreted as a **research and benchmark-oriented system**, not as a clinical diagnostic tool.
+> **Implementation note:** If the original RARE25 ResNet50 starter `inference.py` remains in the repository, it should be treated as the challenge container template rather than the final ViT training implementation.
 
 ---
 
-## 🚀 Future Work
+## ⚠️ Research Use Disclaimer
 
-Possible next steps include:
+This project was developed for **research and challenge evaluation**.
 
-- testing stronger transformer variants
-- improved lesion-focused region modeling
-- better interpretability / explainability
-- more advanced imbalance-aware learning strategies
-- calibration-focused evaluation
-- external validation on additional endoscopy datasets
-- comparison with CNN-based baselines under identical settings
+It is not a medical device and should not be used for clinical diagnosis, screening, treatment, or patient-management decisions.
 
 ---
 
 ## 🤝 Acknowledgements
 
-- **MICCAI / EndoVis / RARE25 Challenge** — challenge organization and evaluation framework
-- **Hugging Face** — challenge dataset hosting
-- **timm** — Vision Transformer implementation
-- **PyTorch** — model development framework
-- **Docker** — portable inference and submission packaging
+- **MICCAI / EndoVis / RARE25 Challenge** — challenge organization and evaluation
+- **Grand Challenge** — challenge infrastructure
+- **Hugging Face** — dataset hosting
+- **PyTorch** — deep learning framework
+- **timm** — pretrained Vision Transformer implementation
+- **OpenCV** — image preprocessing
+- **Docker** — submission packaging
 
 ---
 
